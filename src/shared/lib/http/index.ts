@@ -16,38 +16,89 @@ interface FetchWrapperArgs {
   headers?: HeadersInit;
   next?: { revalidate?: number | false; tags?: string[] };
   credentials?: RequestCredentials;
+  signal?: AbortSignal;
 }
 
-type FetchWrapper = (options: FetchWrapperArgs) => Promise<Response>;
+interface EnhancedResponse<returnedData> {
+  ok: boolean;
+  headers: Headers;
+  redirected: boolean;
+  statusCode: number;
+  statusText: string;
+  type: ResponseType;
+  url: string;
+  data: returnedData;
+  clone(): Response;
+}
 
-type HandleFetchResponse = (response: Response) => Promise<Response>;
+type FetchWrapper = <returnedData>(
+  options: FetchWrapperArgs,
+) => Promise<EnhancedResponse<returnedData>>;
 
-type Post = (options: Omit<FetchWrapperArgs, 'method'>) => Promise<Response>;
-type Get = (
+type HandleFetchResponse = <returnedData>(
+  response: Response,
+) => Promise<EnhancedResponse<returnedData>>;
+
+type Post = <returnedData>(
+  options: Omit<FetchWrapperArgs, 'method'>,
+) => Promise<EnhancedResponse<returnedData>>;
+type Get = <returnedData>(
   options: Omit<FetchWrapperArgs, 'method' | 'body'>,
-) => Promise<Response>;
-type Put = (options: Omit<FetchWrapperArgs, 'method'>) => Promise<Response>;
-type Patch = (options: Omit<FetchWrapperArgs, 'method'>) => Promise<Response>;
-type Delete = (
+) => Promise<EnhancedResponse<returnedData>>;
+type Put = <returnedData>(
+  options: Omit<FetchWrapperArgs, 'method'>,
+) => Promise<EnhancedResponse<returnedData>>;
+type Patch = <returnedData>(
+  options: Omit<FetchWrapperArgs, 'method'>,
+) => Promise<EnhancedResponse<returnedData>>;
+type Delete = <returnedData>(
   options: Omit<FetchWrapperArgs, 'method' | 'body'>,
-) => Promise<Response>;
+) => Promise<EnhancedResponse<returnedData>>;
 
-const handleFetchResponse: HandleFetchResponse = async (response) => {
+interface HTTP {
+  fetch: FetchWrapper;
+  post: Post;
+  get: Get;
+  put: Put;
+  patch: Patch;
+  delete: Delete;
+}
+
+const handleFetchResponse: HandleFetchResponse = async <returnedData>(
+  response: Response,
+) => {
   if (!response.ok) {
     const error = await response.json();
     throw new Error(error.message || `HTTP error! Status: ${response.status}`);
   }
-  return response;
+  const parsedResponse: EnhancedResponse<returnedData> = {
+    ok: response.ok,
+    data: (await response.json()) as returnedData,
+    statusCode: response.status,
+    statusText: response.statusText,
+    clone: response.clone,
+    type: response.type,
+    url: response.url,
+    headers: response.headers,
+    redirected: response.redirected,
+  };
+  return parsedResponse;
 };
 
-export const fetchWrapper: FetchWrapper = async ({
+const fetchWrapper: FetchWrapper = async <returnedData>({
   url = '',
   method = 'GET',
   body,
   headers,
   next,
   credentials = 'include',
-}) => {
+  signal,
+}: FetchWrapperArgs) => {
+  const controller = new AbortController();
+  const { signal: controllerSignal } = controller;
+
+  const fetchSignal = signal || controllerSignal;
+
   const response = await fetch(`${BASE_API_URL}${url}`, {
     method,
     headers: {
@@ -56,23 +107,38 @@ export const fetchWrapper: FetchWrapper = async ({
     },
     credentials,
     next,
-    body: JSON.stringify(body),
+    body: body ? JSON.stringify(body) : undefined,
+    signal: fetchSignal,
   });
 
-  return handleFetchResponse(response);
+  return handleFetchResponse<returnedData>(response);
 };
 
-export const post: Post = async (options) =>
-  await fetchWrapper({ method: 'POST', ...options });
+const post: Post = async <returnedData>(
+  options: Omit<FetchWrapperArgs, 'method'>,
+) => await fetchWrapper<returnedData>({ method: 'POST', ...options });
 
-export const get: Get = async (options) =>
-  await fetchWrapper({ method: 'GET', ...options });
+const get: Get = async <returnedData>(
+  options: Omit<FetchWrapperArgs, 'method' | 'body'>,
+) => await fetchWrapper<returnedData>({ method: 'GET', ...options });
 
-export const put: Put = async (options) =>
-  await fetchWrapper({ method: 'PUT', ...options });
+const put: Put = async <returnedData>(
+  options: Omit<FetchWrapperArgs, 'method'>,
+) => await fetchWrapper<returnedData>({ method: 'PUT', ...options });
 
-export const patch: Patch = async (options) =>
-  await fetchWrapper({ method: 'PATCH', ...options });
+const patch: Patch = async <returnedData>(
+  options: Omit<FetchWrapperArgs, 'method'>,
+) => await fetchWrapper<returnedData>({ method: 'PATCH', ...options });
 
-export const del: Delete = async (options) =>
-  await fetchWrapper({ method: 'PATCH', ...options });
+const del: Delete = async <returnedData>(
+  options: Omit<FetchWrapperArgs, 'method' | 'body'>,
+) => await fetchWrapper<returnedData>({ method: 'DELETE', ...options });
+
+export const http: HTTP = {
+  post,
+  get,
+  put,
+  patch,
+  delete: del,
+  fetch: fetchWrapper,
+};
