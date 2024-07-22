@@ -11,6 +11,8 @@ module.exports = {
     "prettier/prettier": "error",
     'max-len': 'off',
     'consistent-return': 'off',
+    'no-undef': 'off',
+    'no-unused-vars': 'off',
     'no-shadow': 'off',
     'no-param-reassign': 'warn',
     'no-template-curly-in-string': 'off',
