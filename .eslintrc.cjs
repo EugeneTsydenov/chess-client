@@ -20,6 +20,8 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'import/no-extraneous-dependencies': 'off',
     'simple-import-sort/exports': 'error',
+    'sort-imports': 'off',
+    'import/order': 'off',
     'simple-import-sort/imports': [
       'error',
       {
