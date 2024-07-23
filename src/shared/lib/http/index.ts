@@ -35,10 +35,6 @@ type FetchWrapper = <returnedData>(
   options: FetchWrapperArgs,
 ) => Promise<EnhancedResponse<returnedData>>;
 
-type HandleFetchResponse = <returnedData>(
-  response: Response,
-) => Promise<EnhancedResponse<returnedData>>;
-
 type Post = <returnedData>(
   options: Omit<FetchWrapperArgs, 'method'>,
 ) => Promise<EnhancedResponse<returnedData>>;
@@ -63,27 +59,6 @@ interface HTTP {
   patch: Patch;
   delete: Delete;
 }
-
-const handleFetchResponse: HandleFetchResponse = async <returnedData>(
-  response: Response,
-) => {
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || `HTTP error! Status: ${response.status}`);
-  }
-  const parsedResponse: EnhancedResponse<returnedData> = {
-    ok: response.ok,
-    data: (await response.json()) as returnedData,
-    statusCode: response.status,
-    statusText: response.statusText,
-    clone: response.clone,
-    type: response.type,
-    url: response.url,
-    headers: response.headers,
-    redirected: response.redirected,
-  };
-  return parsedResponse;
-};
 
 const fetchWrapper: FetchWrapper = async <returnedData>({
   url = '',
@@ -111,7 +86,19 @@ const fetchWrapper: FetchWrapper = async <returnedData>({
     signal: fetchSignal,
   });
 
-  return handleFetchResponse<returnedData>(response);
+  const parsedResponse: EnhancedResponse<returnedData> = {
+    ok: response.ok,
+    data: (await response.json()) as returnedData,
+    statusCode: response.status,
+    statusText: response.statusText,
+    clone: response.clone,
+    type: response.type,
+    url: response.url,
+    headers: response.headers,
+    redirected: response.redirected,
+  };
+
+  return parsedResponse;
 };
 
 const post: Post = async <returnedData>(
