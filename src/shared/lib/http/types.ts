@@ -27,6 +27,14 @@ export interface IHttp<instance> {
     url: string,
     config?: Omit<Config, 'method' | 'body' | 'baseUrl'>,
   ): Promise<HttpResponse<returnedData>>;
+  head<returnedData>(
+    url: string,
+    config?: Omit<Config, 'method' | 'body' | 'baseUrl'>,
+  ): Promise<HttpResponse<returnedData>>;
+  options<returnedData>(
+    url: string,
+    config?: Omit<Config, 'method' | 'body' | 'baseUrl'>,
+  ): Promise<HttpResponse<returnedData>>;
 }
 
 export interface FetchNext {
@@ -54,6 +62,10 @@ export interface Config {
   body?: Record<string, unknown>;
   priority?: RequestPriority;
   method?: HTTP_METHOD;
+  retry?: {
+    retries: number;
+    delay: number;
+  };
 }
 
 export interface OriginalConfig {

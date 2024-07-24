@@ -19,15 +19,17 @@ class HttpInstance implements IHttp<HttpInstance> {
     },
     priority: 'auto',
     method: 'GET',
+    retry: {
+      retries: 3, // Number of retries
+      delay: 1000, // Delay between retries in milliseconds
+    },
   };
   interceptor: Interceptor = new Interceptor();
 
   create(defaultConfig?: Omit<Config, 'method'>): HttpInstance {
     const mergedConfig = this.mergeConfigs(this.defaultConfig, defaultConfig);
-
     const newInstance = new HttpInstance();
     newInstance.defaultConfig = mergedConfig;
-
     return newInstance;
   }
 
@@ -44,13 +46,34 @@ class HttpInstance implements IHttp<HttpInstance> {
     });
   }
 
-  async fetch<returnedData>(
-    url: string,
-    config?: Omit<Config, 'baseUrl'>,
-  ): Promise<HttpResponse<returnedData>> {
-    const controller = new AbortController();
-    const timeout = config?.timeout ?? this.defaultConfig.timeout;
+  private async delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 
+  private async fetchWithRetry<ReturnedData>(
+    url: string,
+    config: Config,
+    retries: number,
+    delay: number,
+  ): Promise<HttpResponse<ReturnedData>> {
+    try {
+      return await this.performFetch<ReturnedData>(url, config);
+    } catch (error) {
+      if (retries > 0) {
+        await this.delay(delay);
+        return this.fetchWithRetry(url, config, retries - 1, delay);
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  private async performFetch<ReturnedData>(
+    url: string,
+    config: Config,
+  ): Promise<HttpResponse<ReturnedData>> {
+    const controller = new AbortController();
+    const timeout = config.timeout ?? this.defaultConfig.timeout;
     const timeoutId = timeout
       ? setTimeout(() => controller.abort(), timeout)
       : null;
@@ -83,7 +106,7 @@ class HttpInstance implements IHttp<HttpInstance> {
 
       if (timeoutId) clearTimeout(timeoutId);
 
-      const convertedResponse = await this.convertResponse<returnedData>(
+      const convertedResponse = await this.convertResponse<ReturnedData>(
         response,
         {
           url: mergedUrls,
@@ -105,13 +128,23 @@ class HttpInstance implements IHttp<HttpInstance> {
     }
   }
 
-  private async convertResponse<returnedData>(
+  async fetch<ReturnedData>(
+    url: string,
+    config?: Omit<Config, 'baseUrl'>,
+  ): Promise<HttpResponse<ReturnedData>> {
+    const finalConfig = this.mergeConfigs(this.defaultConfig, config);
+    const retries = finalConfig.retry?.retries ?? 0;
+    const delay = finalConfig.retry?.delay ?? 0;
+    return this.fetchWithRetry(url, finalConfig, retries, delay);
+  }
+
+  private async convertResponse<ReturnedData>(
     response: Response,
     config: OriginalConfig,
-  ): Promise<HttpResponse<returnedData>> {
+  ): Promise<HttpResponse<ReturnedData>> {
     return {
       ok: response.ok,
-      data: (await response.json()) as returnedData,
+      data: (await response.json()) as ReturnedData,
       statusCode: response.status,
       statusText: response.statusText,
       clone: response.clone.bind(response),
@@ -123,42 +156,56 @@ class HttpInstance implements IHttp<HttpInstance> {
     };
   }
 
-  async post<returnedData>(
+  async post<ReturnedData>(
     url: string,
     config?: Omit<Config, 'method' | 'baseUrl'>,
-  ): Promise<HttpResponse<returnedData>> {
+  ): Promise<HttpResponse<ReturnedData>> {
     return await this.fetch(url, { ...config, method: 'POST' });
   }
 
-  async delete<returnedData>(
+  async delete<ReturnedData>(
     url: string,
     config?: Omit<Config, 'method' | 'body' | 'baseUrl'>,
-  ): Promise<HttpResponse<returnedData>> {
+  ): Promise<HttpResponse<ReturnedData>> {
     return await this.fetch(url, {
       ...config,
       method: 'DELETE',
     });
   }
 
-  async get<returnedData>(
+  async get<ReturnedData>(
     url: string,
     config?: Omit<Config, 'method' | 'body' | 'baseUrl'>,
-  ): Promise<HttpResponse<returnedData>> {
+  ): Promise<HttpResponse<ReturnedData>> {
     return await this.fetch(url, { ...config, method: 'GET' });
   }
 
-  async patch<returnedData>(
+  async patch<ReturnedData>(
     url: string,
     config?: Omit<Config, 'method' | 'baseUrl'>,
-  ): Promise<HttpResponse<returnedData>> {
+  ): Promise<HttpResponse<ReturnedData>> {
     return await this.fetch(url, { ...config, method: 'PATCH' });
   }
 
-  async put<returnedData>(
+  async put<ReturnedData>(
     url: string,
     config?: Omit<Config, 'method' | 'baseUrl'>,
-  ): Promise<HttpResponse<returnedData>> {
+  ): Promise<HttpResponse<ReturnedData>> {
     return await this.fetch(url, { ...config, method: 'PUT' });
+  }
+
+  async head<returnedData>(
+    url: string,
+    config?: Omit<Config, 'method' | 'body' | 'baseUrl'>,
+  ): Promise<HttpResponse<returnedData>> {
+    return await this.fetch(url, { ...config, method: 'HEAD' });
+  }
+
+  async options<returnedData>(
+    url: string,
+    config?: Omit<Config, 'method' | 'body' | 'baseUrl'>,
+  ): Promise<HttpResponse<returnedData>> {
+    return await this.fetch(url, { ...config, method: 'OPTIONS' });
   }
 }
 
