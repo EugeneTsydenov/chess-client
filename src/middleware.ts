@@ -6,10 +6,7 @@ const questOnlyRoutes = ['/login', '/register'];
 
 export const middleware = async (request: NextRequest) => {
   try {
-    const accessToken = request.cookies.get('accessToken');
-
-    const verifyResponse = await AuthApi.verify(accessToken?.value);
-
+    const verifyResponse = await AuthApi.verify();
     if (questOnlyRoutes.includes(request.nextUrl.pathname)) {
       return await questProtect(verifyResponse.ok, request);
     }
@@ -18,25 +15,19 @@ export const middleware = async (request: NextRequest) => {
       return await authorizedUserProtected(verifyResponse.ok, request);
     }
   } catch (e) {
-    return NextResponse.redirect(new URL('/500', request.url));
+    return NextResponse.rewrite(new URL('/not-found', request.url));
   }
 };
 
 const questProtect = async (isVerify: boolean, request: NextRequest) => {
   if (isVerify) {
-    return NextResponse.redirect(new URL('/404', request.url));
+    return NextResponse.rewrite(new URL('/not-found', request.url));
   }
 
-  const refreshToken = request.cookies.get('refreshToken');
-  const accessToken = request.cookies.get('accessToken');
-
-  const refreshResponse = await AuthApi.refresh(
-    refreshToken?.value,
-    accessToken?.value,
-  );
+  const refreshResponse = await AuthApi.refresh();
 
   if (refreshResponse.ok) {
-    return NextResponse.redirect(new URL('/404', request.url));
+    return NextResponse.rewrite(new URL('/not-found', request.url));
   }
 
   return;
@@ -50,13 +41,7 @@ const authorizedUserProtected = async (
     return;
   }
 
-  const refreshToken = request.cookies.get('refreshToken');
-  const accessToken = request.cookies.get('accessToken');
-
-  const refreshResponse = await AuthApi.refresh(
-    refreshToken?.value,
-    accessToken?.value,
-  );
+  const refreshResponse = await AuthApi.refresh();
 
   if (refreshResponse.ok) {
     const data = refreshResponse.data;
@@ -66,7 +51,7 @@ const authorizedUserProtected = async (
     return nextResponse;
   }
 
-  return NextResponse.redirect(new URL('/401', request.url));
+  return NextResponse.rewrite(new URL('/not-found', request.url));
 };
 
 export const config = {

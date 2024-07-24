@@ -9,7 +9,7 @@ const login = async () => {
       password: 'Messi212_',
       rememberMe: true,
     });
-    console.log(res);
+
     if (res.ok) {
       const data = res.data;
       cookies().set(data.cookies.accessToken);
