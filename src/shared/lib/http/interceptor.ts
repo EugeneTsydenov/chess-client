@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { deepClone } from '../utils';
 
 import {
   Config,
@@ -20,7 +20,7 @@ export class Interceptor {
   }
 
   public async applyFulfilledRequest(config: Config): Promise<Config> {
-    let copiedConfig = _.cloneDeep(config);
+    let copiedConfig = deepClone(config);
 
     for (const interceptor of this.requestInterceptors) {
       copiedConfig = await interceptor.onFulfilled(copiedConfig);

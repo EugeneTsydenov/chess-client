@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { deepClone } from '../utils';
 
 import { Interceptor } from './interceptor';
 import { Config, HttpResponse, IHttp, OriginalConfig } from './types';
@@ -34,7 +34,7 @@ class HttpInstance implements IHttp<HttpInstance> {
   }
 
   private mergeConfigs(baseConfig: Config, overrideConfig?: Config): Config {
-    const newConfig = _.cloneDeep(baseConfig);
+    const newConfig = deepClone(baseConfig);
     const newHeaders = {
       ...newConfig.headers,
       ...overrideConfig?.headers,
