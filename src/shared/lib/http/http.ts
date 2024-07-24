@@ -18,10 +18,11 @@ class HttpInstance implements IHttp<HttpInstance> {
       'Content-Type': 'application/json',
     },
     priority: 'auto',
+    method: 'GET',
   };
   interceptor: Interceptor = new Interceptor();
 
-  create(defaultConfig?: Config): HttpInstance {
+  create(defaultConfig?: Omit<Config, 'method'>): HttpInstance {
     const mergedConfig = this.mergeConfigs(this.defaultConfig, defaultConfig);
 
     const newInstance = new HttpInstance();
@@ -43,10 +44,10 @@ class HttpInstance implements IHttp<HttpInstance> {
     });
   }
 
-  async fetch<ReturnedData>(
+  async fetch<returnedData>(
     url: string,
     config?: Omit<Config, 'baseUrl'>,
-  ): Promise<HttpResponse<ReturnedData>> {
+  ): Promise<HttpResponse<returnedData>> {
     const controller = new AbortController();
     const timeout = config?.timeout ?? this.defaultConfig.timeout;
 
@@ -56,12 +57,17 @@ class HttpInstance implements IHttp<HttpInstance> {
 
     try {
       const requestConfig = this.mergeConfigs(this.defaultConfig, config);
-      const modifiedConfig =
-        await this.interceptor.applyFulfilledRequest(requestConfig);
+      const modifiedConfig = this.mergeConfigs(
+        requestConfig,
+        await this.interceptor.applyFulfilledRequest(requestConfig),
+      );
+
       const mergedUrls = `${this.defaultConfig.baseUrl ?? ''}${url}`;
+
       const response = await fetch(mergedUrls, {
         headers: modifiedConfig.headers,
         credentials: modifiedConfig.credentials,
+        method: modifiedConfig.method,
         mode: modifiedConfig.mode,
         cache: modifiedConfig.cache,
         redirect: modifiedConfig.redirect,
@@ -77,7 +83,7 @@ class HttpInstance implements IHttp<HttpInstance> {
 
       if (timeoutId) clearTimeout(timeoutId);
 
-      const convertedResponse = await this.convertResponse<ReturnedData>(
+      const convertedResponse = await this.convertResponse<returnedData>(
         response,
         {
           url: mergedUrls,
@@ -99,13 +105,13 @@ class HttpInstance implements IHttp<HttpInstance> {
     }
   }
 
-  private async convertResponse<ReturnedData>(
+  private async convertResponse<returnedData>(
     response: Response,
     config: OriginalConfig,
-  ): Promise<HttpResponse<ReturnedData>> {
+  ): Promise<HttpResponse<returnedData>> {
     return {
       ok: response.ok,
-      data: (await response.json()) as ReturnedData,
+      data: (await response.json()) as returnedData,
       statusCode: response.status,
       statusText: response.statusText,
       clone: response.clone.bind(response),
@@ -116,6 +122,44 @@ class HttpInstance implements IHttp<HttpInstance> {
       originalRequest: config,
     };
   }
+
+  async post<returnedData>(
+    url: string,
+    config?: Omit<Config, 'method' | 'baseUrl'>,
+  ): Promise<HttpResponse<returnedData>> {
+    return await this.fetch(url, { ...config, method: 'POST' });
+  }
+
+  async delete<returnedData>(
+    url: string,
+    config?: Omit<Config, 'method' | 'body' | 'baseUrl'>,
+  ): Promise<HttpResponse<returnedData>> {
+    return await this.fetch(url, {
+      ...config,
+      method: 'DELETE',
+    });
+  }
+
+  async get<returnedData>(
+    url: string,
+    config?: Omit<Config, 'method' | 'body' | 'baseUrl'>,
+  ): Promise<HttpResponse<returnedData>> {
+    return await this.fetch(url, { ...config, method: 'GET' });
+  }
+
+  async patch<returnedData>(
+    url: string,
+    config?: Omit<Config, 'method' | 'baseUrl'>,
+  ): Promise<HttpResponse<returnedData>> {
+    return await this.fetch(url, { ...config, method: 'PATCH' });
+  }
+
+  async put<returnedData>(
+    url: string,
+    config?: Omit<Config, 'method' | 'baseUrl'>,
+  ): Promise<HttpResponse<returnedData>> {
+    return await this.fetch(url, { ...config, method: 'PUT' });
+  }
 }
 
-export const http = new HttpInstance();
+export const $http = new HttpInstance();

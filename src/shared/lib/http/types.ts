@@ -1,9 +1,31 @@
+import { HTTP_METHOD } from 'next/dist/server/web/http';
+
 export interface IHttp<instance> {
   defaultConfig: Config;
-  create(defaultConfig: Config): instance;
+  create(defaultConfig: Omit<Config, 'method'>): instance;
   fetch<returnedData>(
     url: string,
     config?: Omit<Config, 'baseUrl'>,
+  ): Promise<HttpResponse<returnedData>>;
+  post<returnedData>(
+    url: string,
+    config?: Omit<Config, 'method' | 'baseUrl'>,
+  ): Promise<HttpResponse<returnedData>>;
+  get<returnedData>(
+    url: string,
+    config?: Omit<Config, 'method' | 'body' | 'baseUrl'>,
+  ): Promise<HttpResponse<returnedData>>;
+  put<returnedData>(
+    url: string,
+    config?: Omit<Config, 'method' | 'baseUrl'>,
+  ): Promise<HttpResponse<returnedData>>;
+  patch<returnedData>(
+    url: string,
+    config?: Omit<Config, 'method' | 'baseUrl'>,
+  ): Promise<HttpResponse<returnedData>>;
+  delete<returnedData>(
+    url: string,
+    config?: Omit<Config, 'method' | 'body' | 'baseUrl'>,
   ): Promise<HttpResponse<returnedData>>;
 }
 
@@ -31,6 +53,7 @@ export interface Config {
   headers?: HeadersInit;
   body?: Record<string, unknown>;
   priority?: RequestPriority;
+  method?: HTTP_METHOD;
 }
 
 export interface OriginalConfig {
