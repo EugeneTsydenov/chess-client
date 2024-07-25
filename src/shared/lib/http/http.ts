@@ -20,8 +20,8 @@ class HttpInstance implements IHttp<HttpInstance> {
     priority: 'auto',
     method: 'GET',
     retry: {
-      retries: 3, // Number of retries
-      delay: 1000, // Delay between retries in milliseconds
+      retries: 3,
+      delay: 1000,
     },
   };
   interceptor: Interceptor = new Interceptor();
