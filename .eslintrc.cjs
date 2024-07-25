@@ -7,6 +7,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest'
   },
+  ignorePatterns: ['src/i18n.ts'],
   rules: {
     "prettier/prettier": "error",
     'max-len': 'off',
