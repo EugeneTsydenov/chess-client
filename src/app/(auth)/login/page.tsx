@@ -1,4 +1,4 @@
-import { AuthApi } from '@shared/api';
+import { AuthApi } from '@entities/auth';
 import { cookies } from 'next/headers';
 import * as React from 'react';
 
