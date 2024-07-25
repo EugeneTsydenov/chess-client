@@ -1,0 +1,108 @@
+{
+  "register_page": {
+    "form": {
+      "username_input_label": "Введите имя пользователя *",
+      "username_input_placeholder": "Имя пользователя",
+      "username_input_description": "Это имя пользователя будет использоваться для входа на сайт.",
+      "display_name_input_label": "Введите отображаемое имя *",
+      "display_name_input_placeholder": "Отоборажаемое имя",
+      "display_name_input_description": "Это ваше общедоступное отображаемое имя.",
+      "email_input_label": "Введите электронную почту *",
+      "email_input_placeholder": "Электронная почта",
+      "email_input_description": "Электронная почта необходима для проверки.",
+      "password_input_label": "Введите пароль *",
+      "password_input_placeholder": "Пароль",
+      "confirm_password_input_label": "Подтвердите пароль *",
+      "confirm_password_input_placeholder": "Пароль",
+      "terms_checkbox_label": "Принять условия использования *",
+      "terms_checkbox_description": "Вы соглашаетесь с нашими Условиями обслуживания и Политикой конфиденциальности."
+    },
+    "title": "Зарегистрируйтесь, чтобы получить новые возможности",
+    "have_account": "Уже есть аккаунт?"
+  },
+  "login_page": {
+    "title": "Войдите, чтобы получить новые возможности",
+    "not_have_account": "Нет аккаунта?",
+    "forgot_password": "Забыли пароль?",
+    "form": {
+      "username_input_label": "Введите имя пользователя *",
+      "username_input_placeholder": "Имя пользователя",
+      "password_input_label": "Введите пароль *",
+      "password_input_placeholder": "Пароль",
+      "remember_me_checkbox_label": "Запомнить меня"
+    }
+  },
+  "header": {
+    "user_menu": {
+      "profile": "Профиль",
+      "theme": "Тема",
+      "dark": "Темная",
+      "light": "Светлая",
+      "system": "Системная",
+      "setting": "Настройки",
+      "language": "Язык",
+      "logout": "Выйти из системы"
+    }
+  },
+  "logout_modal": {
+    "title": "Вы действительно хотите выйти?",
+    "description": "Если да, то нажмите кнопку «Да»"
+  },
+  "nav": {
+    "play": "Играть",
+    "tasks": "Задачи",
+    "education": "Образование",
+    "viewing": "Просмотр",
+    "community": "Сообщество",
+    "instruments": "Инструменты",
+    "playLinks": {
+      "online": "Онлайн",
+      "offline": "Оффлайн",
+      "bot": "Против бота",
+      "friend": "Против друга"
+    },
+    "tasksLinks": {
+      "create": "Создать задачу",
+      "streak": "Полоса задач",
+      "storm": "Шторм задач",
+      "racer": "Гонка задач"
+    },
+    "educationLinks": {
+      "basics": "Основы шахмат",
+      "practice": "Практика",
+      "coordinates": "Координаты",
+      "studio": "Студия",
+      "trainers": "Тренеры"
+    },
+    "viewingLinks": {
+      "tv": "ChessHub ТВ",
+      "games": "Текущие игры",
+      "translations": "Переводы",
+      "library": "Видеотека"
+    },
+    "communityLinks": {
+      "players": "Игроки",
+      "clubs": "Клубы",
+      "forum": "Форум",
+      "blog": "Блог"
+    },
+    "instrumentsLinks": {
+      "analyze": "Анализировать игру",
+      "debuts": "Дебюты",
+      "editor": "Редактор доски",
+      "import": "Импорт партии",
+      "search": "Расширенный поиск"
+    }
+  },
+  "home_page": {
+    "title": "это лучший шахматный сайт",
+    "description": "Попробуйте сыграть прямо сейчас",
+    "play_friend_btn": "Играть против друга",
+    "play_online_btn": "Играть онлайн",
+    "play_bot_btn": "Играть против бота"
+  },
+  "register": "Зарегистрироваться",
+  "login": "Войти",
+  "yes": "Да",
+  "no": "Нет"
+}

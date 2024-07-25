@@ -1,0 +1,108 @@
+{
+  "register_page": {
+    "title": "Registration to open new opportunities",
+    "form": {
+      "username_input_label": "Enter your username *",
+      "username_input_placeholder": "Username",
+      "username_input_description": "This username will be used to log in to the site.",
+      "display_name_input_label": "Enter your display name *",
+      "display_name_input_placeholder": "Display name",
+      "display_name_input_description": "This is your public display name.",
+      "email_input_label": "Enter your email *",
+      "email_input_placeholder": "Email",
+      "email_input_description": "Email is required for verification.",
+      "password_input_label": "Enter your password *",
+      "password_input_placeholder": "Password",
+      "confirm_password_input_label": "Confirm the password *",
+      "confirm_password_input_placeholder": "Password",
+      "terms_checkbox_label": "Accept terms and conditions *",
+      "terms_checkbox_description": "You agree to our Terms of Service and Privacy Policy."
+    },
+    "have_account": "Already have an account?"
+  },
+  "login_page": {
+    "title": "Login, to open new opportunities",
+    "not_have_account": "Don't have an account?",
+    "forgot_password": "Forgot password?",
+    "form": {
+      "username_input_label": "Enter your username *",
+      "username_input_placeholder": "Username",
+      "password_input_label": "Enter your password *",
+      "password_input_placeholder": "Password",
+      "remember_me_checkbox_label": "Remember me"
+    }
+  },
+  "header": {
+    "user_menu": {
+      "profile": "Profile",
+      "theme": "Theme",
+      "dark": "Dark",
+      "light": "Light",
+      "system": "System",
+      "setting": "Settings",
+      "language": "Language",
+      "logout": "Logout"
+    }
+  },
+  "logout_modal": {
+    "title": "Are you sure you want to log out?",
+    "description": "If yes, then click the \"Yes\" button"
+  },
+  "nav": {
+    "play": "Play",
+    "tasks": "Tasks",
+    "education": "Education",
+    "viewing": "Viewing",
+    "community": "Community",
+    "instruments": "Instruments",
+    "playLinks": {
+      "online": "Online",
+      "offline": "Offline",
+      "bot": "Against bot",
+      "friend": "Against friend"
+    },
+    "tasksLinks": {
+      "create": "Create a task",
+      "streak": "Puzzle Streak",
+      "storm": "Puzzle Storm",
+      "racer": "Puzzle Racer"
+    },
+    "educationLinks": {
+      "basics": "Chess basics",
+      "practice": "Practice",
+      "coordinates": "Coordinates",
+      "studio": "Studio",
+      "trainers": "Trainers"
+    },
+    "viewingLinks": {
+      "tv": "ChessHub TV",
+      "games": "Current games",
+      "translations": "Translations",
+      "library": "Video library"
+    },
+    "communityLinks": {
+      "players": "Players",
+      "clubs": "Clubs",
+      "forum": "Forum",
+      "blog": "Blog"
+    },
+    "instrumentsLinks": {
+      "analyze": "Analyze the game",
+      "debuts": "Debuts",
+      "editor": "Board editor",
+      "import": "Import batch",
+      "search": "Advanced search"
+    }
+  },
+  "home_page": {
+    "title": "is the best chess site",
+    "description": "Try playing right now",
+    "play_friend_btn": "Play against friend",
+    "play_online_btn": "Play online",
+    "play_bot_btn": "Play against bot"
+  },
+  "register": "Register",
+  "login": "Login",
+  "yes": "Yes",
+  "no": "No"
+}
