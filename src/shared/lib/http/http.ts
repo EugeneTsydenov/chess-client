@@ -12,7 +12,7 @@ class HttpInstance implements IHttp<HttpInstance> {
       tag: [],
     },
     mode: 'cors',
-    cache: 'default',
+    cache: 'force-cache',
     timeout: 0,
     headers: {
       'Content-Type': 'application/json',
