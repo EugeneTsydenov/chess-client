@@ -1,4 +1,8 @@
-import { AuthApi } from '@shared/api';
+import {
+  AuthApi,
+  refreshResponseSchema,
+  verifyResponseSchema,
+} from '@entities/auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 const authorizedUserOnlyRoutes = ['/play/online'];
@@ -7,14 +11,18 @@ const questOnlyRoutes = ['/login', '/register'];
 export const middleware = async (request: NextRequest) => {
   try {
     const verifyResponse = await AuthApi.verify();
+
+    verifyResponseSchema.parse(verifyResponse.data);
+
     if (questOnlyRoutes.includes(request.nextUrl.pathname)) {
       return await questProtect(verifyResponse.ok, request);
     }
 
     if (authorizedUserOnlyRoutes.includes(request.nextUrl.pathname)) {
-      return await authorizedUserProtected(verifyResponse.ok, request);
+      return await authorizedUserProtect(verifyResponse.ok, request);
     }
   } catch (e) {
+    console.log(e);
     return NextResponse.rewrite(new URL('/not-found', request.url));
   }
 };
@@ -26,6 +34,8 @@ const questProtect = async (isVerify: boolean, request: NextRequest) => {
 
   const refreshResponse = await AuthApi.refresh();
 
+  refreshResponseSchema.parse(refreshResponse.data);
+
   if (refreshResponse.ok) {
     return NextResponse.rewrite(new URL('/not-found', request.url));
   }
@@ -33,7 +43,7 @@ const questProtect = async (isVerify: boolean, request: NextRequest) => {
   return;
 };
 
-const authorizedUserProtected = async (
+const authorizedUserProtect = async (
   isVerify: boolean,
   request: NextRequest,
 ) => {
@@ -42,6 +52,8 @@ const authorizedUserProtected = async (
   }
 
   const refreshResponse = await AuthApi.refresh();
+
+  refreshResponseSchema.parse(refreshResponse.data);
 
   if (refreshResponse.ok) {
     const data = refreshResponse.data;
