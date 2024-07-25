@@ -22,3 +22,15 @@ export {
 export { Input } from './input';
 export { default as Link } from './Link';
 export { default as Logo } from './Logo';
+export {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from './select';
