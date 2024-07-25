@@ -12,7 +12,9 @@ export const middleware = async (request: NextRequest) => {
   try {
     const verifyResponse = await AuthApi.verify();
 
-    verifyResponseSchema.parse(verifyResponse.data);
+    if (verifyResponse.ok) {
+      verifyResponseSchema.parse(verifyResponse.data);
+    }
 
     if (questOnlyRoutes.includes(request.nextUrl.pathname)) {
       return await questProtect(verifyResponse.ok, request);
@@ -34,10 +36,15 @@ const questProtect = async (isVerify: boolean, request: NextRequest) => {
 
   const refreshResponse = await AuthApi.refresh();
 
-  refreshResponseSchema.parse(refreshResponse.data);
-
   if (refreshResponse.ok) {
-    return NextResponse.rewrite(new URL('/not-found', request.url));
+    refreshResponseSchema.parse(refreshResponse.data);
+    const data = refreshResponse.data;
+    const nextResponse = NextResponse.redirect(
+      new URL('/not-found', request.url),
+    );
+    nextResponse.cookies.set(data.cookies.refreshToken);
+    nextResponse.cookies.set(data.cookies.accessToken);
+    return nextResponse;
   }
 
   return;
@@ -53,9 +60,8 @@ const authorizedUserProtect = async (
 
   const refreshResponse = await AuthApi.refresh();
 
-  refreshResponseSchema.parse(refreshResponse.data);
-
   if (refreshResponse.ok) {
+    refreshResponseSchema.parse(refreshResponse.data);
     const data = refreshResponse.data;
     const nextResponse = NextResponse.redirect(request.url);
     nextResponse.cookies.set(data.cookies.refreshToken);
