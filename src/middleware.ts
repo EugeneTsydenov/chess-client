@@ -1,6 +1,7 @@
 import {
-  AuthApi,
+  refresh,
   refreshResponseSchema,
+  verify,
   verifyResponseSchema,
 } from '@entities/auth';
 import { NextRequest, NextResponse } from 'next/server';
@@ -10,7 +11,7 @@ const questOnlyRoutes = ['/login', '/register'];
 
 export const middleware = async (request: NextRequest) => {
   try {
-    const verifyResponse = await AuthApi.verify();
+    const verifyResponse = await verify();
 
     if (verifyResponse.ok) {
       verifyResponseSchema.parse(verifyResponse.data);
@@ -34,7 +35,7 @@ const questProtect = async (isVerify: boolean, request: NextRequest) => {
     return NextResponse.rewrite(new URL('/not-found', request.url));
   }
 
-  const refreshResponse = await AuthApi.refresh();
+  const refreshResponse = await refresh();
 
   if (refreshResponse.ok) {
     refreshResponseSchema.parse(refreshResponse.data);
@@ -58,7 +59,7 @@ const authorizedUserProtect = async (
     return;
   }
 
-  const refreshResponse = await AuthApi.refresh();
+  const refreshResponse = await refresh();
 
   if (refreshResponse.ok) {
     refreshResponseSchema.parse(refreshResponse.data);
