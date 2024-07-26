@@ -83,7 +83,6 @@ export interface HttpResponse<returnedData> {
   url: string;
   data: returnedData;
   originalRequest: OriginalConfig;
-  clone(): Response;
 }
 
 export interface RequestInterceptor {

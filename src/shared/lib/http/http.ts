@@ -7,10 +7,6 @@ class HttpInstance implements IHttp<HttpInstance> {
   defaultConfig: Config = {
     baseUrl: '',
     credentials: 'same-origin',
-    next: {
-      revalidate: false,
-      tag: [],
-    },
     mode: 'cors',
     cache: 'force-cache',
     timeout: 0,
@@ -147,7 +143,6 @@ class HttpInstance implements IHttp<HttpInstance> {
       data: (await response.json()) as ReturnedData,
       statusCode: response.status,
       statusText: response.statusText,
-      clone: response.clone.bind(response),
       type: response.type,
       url: response.url,
       headers: response.headers,
