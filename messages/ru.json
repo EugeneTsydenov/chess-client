@@ -23,13 +23,14 @@
   "login_page": {
     "title": "Войдите, чтобы получить новые возможности",
     "not_have_account": "Нет аккаунта?",
-    "forgot_password": "Забыли пароль?",
     "form": {
       "username_input_label": "Введите имя пользователя *",
       "username_input_placeholder": "Имя пользователя",
       "password_input_label": "Введите пароль *",
       "password_input_placeholder": "Пароль",
-      "remember_me_checkbox_label": "Запомнить меня"
+      "remember_me_checkbox_label": "Запомнить меня",
+      "forgot_password": "Забыли пароль?",
+      "login_btn": "Войти"
     }
   },
   "header": {
@@ -102,7 +103,6 @@
     "play_bot_btn": "Играть против бота"
   },
   "register": "Зарегистрироваться",
-  "login": "Войти",
   "yes": "Да",
   "no": "Нет"
 }

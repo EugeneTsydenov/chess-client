@@ -22,11 +22,9 @@ const LanguageSelector = () => {
   return (
     <Select
       defaultValue={locale}
-      onValueChange={(value: string) => {
+      onValueChange={async (value: string) => {
         const locale = value as Locale;
-        startTransition(async () => {
-          await setUserLocale(locale);
-        });
+        await setUserLocale(locale);
       }}
     >
       <SelectTrigger

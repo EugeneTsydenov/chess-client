@@ -23,13 +23,14 @@
   "login_page": {
     "title": "Login, to open new opportunities",
     "not_have_account": "Don't have an account?",
-    "forgot_password": "Forgot password?",
     "form": {
       "username_input_label": "Enter your username *",
       "username_input_placeholder": "Username",
       "password_input_label": "Enter your password *",
       "password_input_placeholder": "Password",
-      "remember_me_checkbox_label": "Remember me"
+      "remember_me_checkbox_label": "Remember me",
+      "forgot_password": "Forgot password?",
+      "login_btn": "Login"
     }
   },
   "header": {
@@ -102,7 +103,6 @@
     "play_bot_btn": "Play against bot"
   },
   "register": "Register",
-  "login": "Login",
   "yes": "Yes",
   "no": "No"
 }
