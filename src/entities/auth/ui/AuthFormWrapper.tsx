@@ -22,7 +22,7 @@ const AuthFormWrapper = ({ action, children }: AuthFormWrapperProps) => {
           <p className="text-base mt-5">
             {t('register_page.have_account')}
             <Link href="/login" className="text-base ml-1">
-              {t('login')}
+              {t('login_page.form.login_btn')}
             </Link>
           </p>
         )}
@@ -30,7 +30,7 @@ const AuthFormWrapper = ({ action, children }: AuthFormWrapperProps) => {
           <p className="text-base mt-5">
             {t('login_page.not_have_account')}
             <Link href="/register" className="text-base ml-1">
-              {t('register')}
+              {t('register_page.form.register_btn')}
             </Link>
           </p>
         )}

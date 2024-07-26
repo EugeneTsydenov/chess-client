@@ -14,6 +14,7 @@
       "password_input_label": "Enter your password *",
       "password_input_placeholder": "Password",
       "confirm_password_input_label": "Confirm the password *",
+      "register_btn": "Register",
       "confirm_password_input_placeholder": "Password",
       "terms_checkbox_label": "Accept terms and conditions *",
       "terms_checkbox_description": "You agree to our Terms of Service and Privacy Policy."
@@ -102,7 +103,6 @@
     "play_online_btn": "Play online",
     "play_bot_btn": "Play against bot"
   },
-  "register": "Register",
   "yes": "Yes",
   "no": "No"
 }
