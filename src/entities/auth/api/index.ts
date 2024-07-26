@@ -4,6 +4,7 @@ import { $authApi } from '@shared/api';
 import { cookies } from 'next/headers';
 
 import {
+  LoginFormSchemaType,
   LoginResponseType,
   RefreshResponseType,
   VerifyResponseType,
@@ -22,11 +23,7 @@ export const refresh = async () => {
   });
 };
 
-export const login = async (credentials: {
-  username: string;
-  password: string;
-  rememberMe: boolean;
-}) =>
+export const login = async (credentials: LoginFormSchemaType) =>
   await $authApi.post<LoginResponseType>('/login', {
     body: credentials,
   });

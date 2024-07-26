@@ -31,7 +31,8 @@
       "password_input_placeholder": "Пароль",
       "remember_me_checkbox_label": "Запомнить меня",
       "forgot_password": "Забыли пароль?",
-      "login_btn": "Войти"
+      "login_btn": "Войти",
+      "success_message": "Вы успешно вошли!"
     }
   },
   "header": {
@@ -104,5 +105,7 @@
     "play_bot_btn": "Играть против бота"
   },
   "yes": "Да",
-  "no": "Нет"
+  "no": "Нет",
+  "server_error": "Ошибка сервера! Попробуйте еще раз или повторите позже",
+  "unknown_error": "Неизвестная ошибка! Попробуйте еще раз или повторите позже"
 }

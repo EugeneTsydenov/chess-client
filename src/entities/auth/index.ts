@@ -3,6 +3,7 @@ export {
   loginFormSchema,
   type LoginFormSchemaType,
   loginResponseSchema,
+  type LoginResponseType,
   refreshResponseSchema,
   registerFormSchema,
   type RegisterFormSchemaType,

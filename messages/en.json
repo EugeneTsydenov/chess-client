@@ -31,7 +31,8 @@
       "password_input_placeholder": "Password",
       "remember_me_checkbox_label": "Remember me",
       "forgot_password": "Forgot password?",
-      "login_btn": "Login"
+      "login_btn": "Login",
+      "success_message": "You successfully log in!"
     }
   },
   "header": {
@@ -104,5 +105,7 @@
     "play_bot_btn": "Play against bot"
   },
   "yes": "Yes",
-  "no": "No"
+  "no": "No",
+  "server_error": "Server Error! Repeat again or try later",
+  "unknown_error": "Unknown to the error! Try again or repeat later!"
 }
