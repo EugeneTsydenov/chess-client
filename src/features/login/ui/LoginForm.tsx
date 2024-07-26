@@ -1,6 +1,12 @@
 'use client';
 
-import { AuthFormWrapper } from '@entities/auth';
+import {
+  AuthFormWrapper,
+  loginFormSchema,
+  LoginFormSchemaType,
+} from '@entities/auth';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { handleError, handleValidationError, toast } from '@shared/lib';
 import {
   Button,
   Form,
@@ -8,46 +14,98 @@ import {
   FormFieldInput,
   Link,
 } from '@shared/ui';
-import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 
-const LoginForm = () => {
-  const form = useForm();
+import { loginAction } from '../actions';
 
-  const t = useTranslations('login_page.form');
+const LoginForm = () => {
+  const form = useForm<LoginFormSchemaType>({
+    resolver: zodResolver(loginFormSchema),
+  });
+  const t = useTranslations();
+  const formT = useTranslations('login_page.form');
+
+  const router = useRouter();
+  const locale = useLocale();
+
+  const handleLoginSuccess = () => {
+    toast(formT('success_message'));
+    router.push('/');
+  };
+
+  const handleLoginError = (err: any) => {
+    const statusCode = err.statusCode;
+
+    handleError(
+      statusCode,
+      {
+        '[401, 404]': () => {
+          const errors: Array<{
+            field: 'username' | 'password';
+            message: string;
+          }> = err.data[locale].errors;
+          handleValidationError(errors, form.setError);
+        },
+        500: () => {
+          toast(t('server_error'), { type: 'error' });
+        },
+      },
+      () => {
+        toast(t('unknown_error'), {
+          type: 'error',
+        });
+      },
+    );
+  };
+
+  const onSubmit = async (credentials: LoginFormSchemaType) => {
+    try {
+      const response = await loginAction(credentials);
+      if (response.ok) {
+        handleLoginSuccess();
+      } else {
+        handleLoginError(response);
+      }
+    } catch (e: any) {
+      console.error(e);
+      handleLoginError(e);
+    }
+  };
 
   return (
     <AuthFormWrapper action="Login">
       <Form {...form}>
-        <form>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormFieldInput
             control={form.control}
             name="username"
             type="text"
-            placeholder={t('username_input_placeholder')}
-            label={t('username_input_label')}
+            placeholder={formT('username_input_placeholder')}
+            label={formT('username_input_label')}
             className="mb-5"
           />
           <FormFieldInput
             control={form.control}
             name="password"
             type="password"
-            placeholder={t('password_input_placeholder')}
-            label={t('password_input_label')}
+            placeholder={formT('password_input_placeholder')}
+            label={formT('password_input_label')}
           />
           <div className="mt-7 flex items-center justify-between">
             <FormFieldCheckbox
               name="rememberMe"
               className="cursor-pointer"
-              label={t('remember_me_checkbox_label')}
+              label={formT('remember_me_checkbox_label')}
             />
             <Link href="#" className="hover:underline text-base font-medium">
-              {t('forgot_password')}
+              {formT('forgot_password')}
             </Link>
           </div>
           <Button className="mt-7 w-full" type="submit">
-            {t('login_btn')}
+            {formT('login_btn')}
           </Button>
         </form>
       </Form>
