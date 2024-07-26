@@ -1,10 +1,11 @@
-import { LanguageSelector } from '@features/change-language';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import * as React from 'react';
+import { ToastContainer } from 'react-toastify';
 
+import 'react-toastify/dist/ReactToastify.css';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -27,8 +28,8 @@ export default async function RootLayout({
     <html lang={locale}>
       <body className={inter.className}>
         <NextIntlClientProvider messages={messages}>
-          <LanguageSelector />
           {children}
+          <ToastContainer />
         </NextIntlClientProvider>
       </body>
     </html>
