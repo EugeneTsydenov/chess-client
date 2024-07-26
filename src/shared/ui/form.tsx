@@ -16,6 +16,7 @@ import {
 
 import { cn } from '../lib';
 
+import { Checkbox } from './checkbox';
 import { Input } from './input';
 import { Label } from './label';
 
@@ -170,7 +171,7 @@ const FormMessage = React.forwardRef<
 });
 FormMessage.displayName = 'FormMessage';
 
-interface FormFieldProps {
+interface FormFieldInputProps {
   placeholder?: string;
   label?: string;
   description?: string;
@@ -198,7 +199,7 @@ const FormFieldInput = ({
   inputClassName,
   descriptionClassName,
   messageClassName,
-}: FormFieldProps) => {
+}: FormFieldInputProps) => {
   return (
     <FormField
       control={control}
@@ -224,11 +225,63 @@ const FormFieldInput = ({
   );
 };
 
+interface FormFieldCheckboxProps {
+  label?: string;
+  description?: string;
+  className?: string;
+  labelClassName?: string;
+  controlClassName?: string;
+  inputClassName?: string;
+  descriptionClassName?: string;
+  messageClassName?: string;
+  control?: Control<any>;
+  name: string;
+}
+
+const FormFieldCheckbox = ({
+  control,
+  name,
+  label,
+  description,
+  className,
+  labelClassName,
+  controlClassName,
+  inputClassName,
+  descriptionClassName,
+  messageClassName,
+}: FormFieldCheckboxProps) => {
+  return (
+    <FormField
+      control={control}
+      render={({ field }) => (
+        <FormItem className={className}>
+          <div className="flex items-center gap-2">
+            <FormControl className={controlClassName}>
+              <Checkbox
+                className={inputClassName}
+                checked={field.value}
+                onCheckedChange={field.onChange}
+              />
+            </FormControl>
+            <FormLabel className={labelClassName}>{label}</FormLabel>
+          </div>
+          <FormDescription className={descriptionClassName}>
+            {description}
+          </FormDescription>
+          <FormMessage className={messageClassName} />
+        </FormItem>
+      )}
+      name={name}
+    />
+  );
+};
+
 export {
   Form,
   FormControl,
   FormDescription,
   FormField,
+  FormFieldCheckbox,
   FormFieldInput,
   FormItem,
   FormLabel,

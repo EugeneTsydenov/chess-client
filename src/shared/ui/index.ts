@@ -13,6 +13,7 @@ export {
   FormControl,
   FormDescription,
   FormField,
+  FormFieldCheckbox,
   FormFieldInput,
   FormItem,
   FormLabel,
