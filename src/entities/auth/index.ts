@@ -8,6 +8,8 @@ export {
   type RefreshResponseType,
   registerFormSchema,
   type RegisterFormSchemaType,
+  registerResponseSchema,
+  type RegisterResponseType,
   verifyResponseSchema,
 } from './model';
 export { AuthFormWrapper } from './ui';
