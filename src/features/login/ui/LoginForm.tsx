@@ -66,11 +66,13 @@ const LoginForm = () => {
   const onSubmit = async (credentials: LoginFormSchemaType) => {
     try {
       const { statusCode, ok, data } = await loginAction(credentials);
+
       if (ok) {
         await handleSuccessLogin(data.user);
-      } else {
-        handleLoginError({ statusCode, data });
+        return;
       }
+
+      handleLoginError({ statusCode, data });
     } catch (e: any) {
       handleLoginError(e);
     }
