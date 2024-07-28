@@ -17,7 +17,8 @@
       "register_btn": "Register",
       "confirm_password_input_placeholder": "Password",
       "terms_checkbox_label": "Accept terms and conditions *",
-      "terms_checkbox_description": "You agree to our Terms of Service and Privacy Policy."
+      "terms_checkbox_description": "You agree to our Terms of Service and Privacy Policy.",
+      "success_message": "You have successfully registered! Now log in"
     },
     "have_account": "Already have an account?"
   },
