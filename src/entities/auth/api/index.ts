@@ -6,6 +6,8 @@ import { cookies } from 'next/headers';
 import {
   LoginResponseType,
   RefreshResponseType,
+  RegisterFormSchemaType,
+  RegisterResponseType,
   VerifyResponseType,
 } from '../model';
 
@@ -31,4 +33,9 @@ export const login = async (credentials: {
 }) =>
   await $authApi.post<LoginResponseType>(`${AUTH_ROUTE}/login`, {
     body: credentials,
+  });
+
+export const register = async (data: Omit<RegisterFormSchemaType, 'terms'>) =>
+  await $authApi.post<RegisterResponseType>(`${AUTH_ROUTE}/register`, {
+    body: data,
   });
