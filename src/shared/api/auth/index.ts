@@ -2,9 +2,7 @@ import { cookies } from 'next/headers';
 
 import { $baseApi } from '../base';
 
-export const $authApi = $baseApi.create({
-  baseUrl: '/auth',
-});
+export const $authApi = $baseApi.create();
 
 $authApi.interceptor.useRequest({
   async onFulfilled(config) {

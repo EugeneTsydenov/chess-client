@@ -36,6 +36,7 @@ class HttpInstance implements IHttp<HttpInstance> {
       ...overrideConfig?.headers,
     };
     const newBaseUrl = `${baseConfig.baseUrl ?? ''}${overrideConfig?.baseUrl ?? ''}`;
+
     return Object.assign(newConfig, overrideConfig, {
       baseUrl: newBaseUrl,
       headers: newHeaders,
