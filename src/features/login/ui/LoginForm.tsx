@@ -5,6 +5,7 @@ import {
   loginFormSchema,
   LoginFormSchemaType,
 } from '@entities/auth';
+import { User } from '@entities/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { handleError, handleValidationError, toast } from '@shared/lib';
 import {
@@ -31,7 +32,8 @@ const LoginForm = () => {
   const router = useRouter();
   const locale = useLocale();
 
-  const handleLoginSuccess = () => {
+  const handleSuccessLogin = async (session: User) => {
+    console.log(session);
     toast(formT('success_message'));
     router.push('/');
   };
@@ -63,14 +65,13 @@ const LoginForm = () => {
 
   const onSubmit = async (credentials: LoginFormSchemaType) => {
     try {
-      const response = await loginAction(credentials);
-      if (response.ok) {
-        handleLoginSuccess();
+      const { statusCode, ok, data } = await loginAction(credentials);
+      if (ok) {
+        await handleSuccessLogin(data.user);
       } else {
-        handleLoginError(response);
+        handleLoginError({ statusCode, data });
       }
     } catch (e: any) {
-      console.error(e);
       handleLoginError(e);
     }
   };

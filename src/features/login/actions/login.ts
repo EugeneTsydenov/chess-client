@@ -5,7 +5,6 @@ import { cookies } from 'next/headers';
 
 export const loginAction = async (credentials: LoginFormSchemaType) => {
   const response = await login(credentials);
-  console.log(response.data);
   const data = response.data;
 
   if (response.ok) {
@@ -15,7 +14,17 @@ export const loginAction = async (credentials: LoginFormSchemaType) => {
         cookies().set(data.cookies.refreshToken);
       }
     }
+
+    return {
+      statusCode: response.statusCode,
+      ok: response.ok,
+      data: { user: data.user },
+    };
   }
 
-  return response;
+  return {
+    statusCode: response.statusCode,
+    ok: response.ok,
+    data: response.data,
+  };
 };
