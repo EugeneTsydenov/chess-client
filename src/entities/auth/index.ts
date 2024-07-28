@@ -5,6 +5,7 @@ export {
   loginResponseSchema,
   type LoginResponseType,
   refreshResponseSchema,
+  type RefreshResponseType,
   registerFormSchema,
   type RegisterFormSchemaType,
   verifyResponseSchema,

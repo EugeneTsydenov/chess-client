@@ -17,6 +17,13 @@ export const loginResponseSchema = z.object({
       })
       .nullish(),
   }),
+  user: z.object({
+    id: z.number(),
+    displayName: z.string(),
+    avatar: z.string().nullable(),
+    rating: z.number(),
+    avatarBackgroundColor: z.string().nullable(),
+  }),
 });
 
 export type LoginResponseType = z.infer<typeof loginResponseSchema>;
